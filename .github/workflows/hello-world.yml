@@ -1,0 +1,12 @@
+name: Hello World pipeline
+on: push
+jobs:
+ my-job:
+  runs-on: ubuntu-latest
+  steps:
+      - name: Print Hello World
+        run: echo "hello World"
+      - name: Create directory
+        run: mkdir sample-dir
+      - name: List directory
+        run: ls -lrt
