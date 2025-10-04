@@ -10,3 +10,5 @@ jobs:
         run: mkdir sample-dir
       - name: List directory
         run: ls -lrt
+      - name: Create Directory2
+        run: mkdir sample-dir2
