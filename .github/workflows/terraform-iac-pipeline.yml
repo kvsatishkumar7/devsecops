@@ -4,6 +4,17 @@ jobs:
  terraform-job:
   runs-on: ubuntu-22.04
   steps:
+  
+      - name: checkout the code
+        uses: actions/checkout@v5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.0.0
+        with:
+             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+             aws-region: us-west-2
+        
       - name: Check TF version
         run: terraform -version
         
@@ -11,7 +22,7 @@ jobs:
         run: terraform init
         
       - name: TF format
-        run: terraform format
+        run: terraform fmt
 
       - name: TF validate
         run: terraform validate
