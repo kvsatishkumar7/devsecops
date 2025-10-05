@@ -1,0 +1,23 @@
+name: Terraform-iac-pipeline
+on: push
+jobs:
+ terraform-job:
+  runs-on: ubuntu-22.04
+  steps:
+      - name: Check TF version
+        run: terraform -version
+        
+      - name: TF init
+        run: terraform init
+        
+      - name: TF format
+        run: terraform format
+
+      - name: TF validate
+        run: terraform validate
+        
+      - name: TF plan
+        run: terraform plan
+
+      - name: TF apply
+        run: terraform apply -auto-approve
