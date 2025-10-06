@@ -1,55 +1,60 @@
 name: Terraform-iac-pipeline
 on: push
+
 jobs:
- terraform-job:
-  runs-on: ubuntu-22.04
-  steps:
-  
-      - name: checkout the code
+  terraform-job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout the code
         uses: actions/checkout@v5
         with:
-              fetch-depth: 0
+          fetch-depth: 0
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v5.0.0
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-             aws-region: us-west-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
 
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
       - name: Check TF version
         run: terraform -version
-        
+
       - name: TF init
         run: terraform init
-        
+
       - name: TF format
-        run: terraform fmt
+        run: terraform fmt -check
 
       - name: TF validate
         run: terraform validate
 
-      - uses: terraform-linters/setup-tflint@v6
-        name: Setup TFLint
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v6
         with:
-             tflint_version: v0.52.0
+          tflint_version: v0.52.0
 
-      - name: Show version
+      - name: Show TFLint version
         run: tflint --version
 
       - name: Init TFLint
         run: tflint --init
         env:
-            GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: run TFLint
+      - name: Run TFLint
         run: tflint -f compact
-        
+
       - name: TF plan
         run: terraform plan
 
