@@ -38,7 +38,7 @@ jobs:
         name: Setup TFLint
         with:
              tflint_version: v0.52.0
-
+             
       - name: Show version
         run: tflint --version
 
@@ -47,7 +47,7 @@ jobs:
         env:
             GITHUB_TOKEN: ${{ github.token }}
 
-      - name: run TFLint
+      - name: Run TFLint
         run: tflint -f compact
         
       - name: TF plan
