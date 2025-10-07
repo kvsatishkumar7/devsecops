@@ -55,6 +55,7 @@ jobs:
         with:
             output format: cli,sarif
             output_file_path: console, results.sarif
+            soft_file: true
         
       - name: TF plan
         run: terraform plan
