@@ -49,9 +49,12 @@ jobs:
 
       - name: Run TFLint
         run: tflint -f compact
+
+      - name: Checkov Github action
+        uses: bridgecrewio/checkov-action@v12
+        with:
+            output format: cli,sarif
+            output_file_path: console, results.sarif
         
       - name: TF plan
         run: terraform plan
-
-      - name: TF apply
-        run: terraform apply -auto-approve
